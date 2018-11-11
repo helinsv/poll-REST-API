@@ -31,7 +31,17 @@ app.get('/api/answers', (req, res) => {
 	res.send(answers);
 });
 
-app.post('/api/answers/', (req, res) => {	
+app.post('/api/answers', (req, res) => {
+	const schema = {
+		answer: Joi.string().min(3).required()
+	};
+
+	const result = Joi.validate(req.body, schema);
+	if (result.error) {
+		res.status(400).send(result.error.details[0].message);
+		return;
+	}
+
 	const answer = {
 		id: answers.length + 1,
 		answer: req.body.answer,
