@@ -23,6 +23,14 @@ const answers = [
 ];
 
 
+app.get('/', (req, res) => {
+	res.send('Hello world!');
+});
+
+app.get('/api/answers', (req, res) => {
+	res.send(answers);
+});
+
 
 
 
