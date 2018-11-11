@@ -32,13 +32,9 @@ app.get('/api/answers', (req, res) => {
 });
 
 app.post('/api/answers', (req, res) => {
-	const schema = {
-		answer: Joi.string().min(3).required()
-	};
-
-	const result = Joi.validate(req.body, schema);
-	if (result.error) {
-		res.status(400).send(result.error.details[0].message);
+	const { error } = validateAnswers(req.body);
+	if (error) {
+		res.status(400).send(error.details[0].message);
 		return;
 	}
 
@@ -52,7 +48,27 @@ app.post('/api/answers', (req, res) => {
 	res.send(answer);
 });
 
+app.put('/api/answers/:id', (req, res) => {
+	const answer = answers.find(c => c.id === parseInt(req.params.id));
+	if(!answer) res.status(404).send('The answer with the given ID was not found');
 
+	const { error } = validateAnswers(req.body);
+	if (error) {
+		res.status(400).send(error.details[0].message);
+		return;
+	}
+
+	answer.answer = req.body.answer;
+	res.send(answer);
+});
+
+function validateAnswers(answers){
+	const schema = {
+		answer: Joi.string().min(3).required()
+	};
+
+	return Joi.validate(answers, schema);
+}
 
 /*app.get('/api/courses/:id', (req, res) => {	
 	const course = courses.find(c => c.id === parseInt(req.params.id));
