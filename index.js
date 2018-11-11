@@ -62,6 +62,15 @@ app.put('/api/answers/:id', (req, res) => {
 	res.send(answer);
 });
 
+app.delete('/api/answers/:id', (req, res) => {
+	const answer = answers.find(c => c.id === parseInt(req.params.id));
+	if(!answer) res.status(404).send('The answer with the given ID was not found');
+
+	const index = answers.indexOf(answer);
+	answers.splice(index, 1);
+	res.send(answer);
+});
+
 function validateAnswers(answers){
 	const schema = {
 		answer: Joi.string().min(3).required()
@@ -70,11 +79,7 @@ function validateAnswers(answers){
 	return Joi.validate(answers, schema);
 }
 
-/*app.get('/api/courses/:id', (req, res) => {	
-	const course = courses.find(c => c.id === parseInt(req.params.id));
-	if(!course) res.status(404).send('404');
-	res.send(course.name);
-})*/
+
 
 
 
