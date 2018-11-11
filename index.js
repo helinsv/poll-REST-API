@@ -31,6 +31,16 @@ app.get('/api/answers', (req, res) => {
 	res.send(answers);
 });
 
+app.post('/api/answers/', (req, res) => {	
+	const answer = {
+		id: answers.length + 1,
+		answer: req.body.answer,
+		votes: 0
+	};
+
+	answers.push(answer);
+	res.send(answer);
+});
 
 
 
