@@ -1,0 +1,23 @@
+{
+  "name": "poll",
+  "version": "1.0.0",
+  "description": "simple polling system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helinsv/poll.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/helinsv/poll/issues"
+  },
+  "homepage": "https://github.com/helinsv/poll#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
