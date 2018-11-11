@@ -33,10 +33,7 @@ app.get('/api/answers', (req, res) => {
 
 app.post('/api/answers', (req, res) => {
 	const { error } = validateAnswers(req.body);
-	if (error) {
-		res.status(400).send(error.details[0].message);
-		return;
-	}
+	if (error) return res.status(400).send(error.details[0].message);
 
 	const answer = {
 		id: answers.length + 1,
@@ -50,13 +47,11 @@ app.post('/api/answers', (req, res) => {
 
 app.put('/api/answers/:id', (req, res) => {
 	const answer = answers.find(c => c.id === parseInt(req.params.id));
-	if(!answer) res.status(404).send('The answer with the given ID was not found');
+	if(!answer) return res.status(404).send('The answer with the given ID was not found');
 
 	const { error } = validateAnswers(req.body);
-	if (error) {
-		res.status(400).send(error.details[0].message);
-		return;
-	}
+	if (error) return res.status(400).send(error.details[0].message);
+
 
 	answer.answer = req.body.answer;
 	res.send(answer);
@@ -64,10 +59,17 @@ app.put('/api/answers/:id', (req, res) => {
 
 app.delete('/api/answers/:id', (req, res) => {
 	const answer = answers.find(c => c.id === parseInt(req.params.id));
-	if(!answer) res.status(404).send('The answer with the given ID was not found');
+	if(!answer) return res.status(404).send('The answer with the given ID was not found');
 
 	const index = answers.indexOf(answer);
 	answers.splice(index, 1);
+	res.send(answer);
+});
+
+
+app.get('/api/answers/:id', (req, res) => {
+	const answer = answers.find(c => c.id === parseInt(req.params.id));
+	if(!answer) return res.status(404).send('The answer with the given ID was not found');
 	res.send(answer);
 });
 
@@ -78,9 +80,6 @@ function validateAnswers(answers){
 
 	return Joi.validate(answers, schema);
 }
-
-
-
 
 
 //PORT
