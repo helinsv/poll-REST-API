@@ -4,52 +4,66 @@ const app = express();
 
 app.use(express.json());
 
-const answers = [
-	{ 
-		id: 1, 
-		answer:'Заленський',
-		votes: 0
-	},
-	{ 
-		id: 2, 
-		answer:'Порошенко',
-		votes: 0
-	},
-	{ 
-		id: 3, 
-		answer:'Вакарчук',
-		votes: 0
-	},
-];
+const questions = [{
+	id: '1',
+	question: 'hto stane novum zlodiem?',
+	answers: [
+		{
+			id: '1',
+			answer: 'zelensky',
+			votes: 1
+		},
+		{
+			id: '2',
+			answer: 'poroshenko',
+			votes: 2
+		},
+		{
+			id: '3',
+			answer: 'vakarchyk',
+			votes: 3
+		},
+	],
+}];
 
-
-app.get('/', (req, res) => {
-	res.send('Hello world!');
+app.get('/api/questions', (req, res) => {
+	res.send(questions);
 });
 
-app.get('/api/answers', (req, res) => {
-	res.send(answers);
-});
-
-app.post('/api/answers', (req, res) => {
-	const { error } = validateAnswers(req.body);
+app.post('/api/questions', (req, res) => {
+	const { error } = validateQuestions(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
-
-	const answer = {
-		id: answers.length + 1,
-		answer: req.body.answer,
-		votes: 0
+	const question = {
+		id: questions.length + 1,
+		question: req.body.question,
+		answers: [
+			{
+				id: 1,
+				answer: req.body.answers[0].answer,
+				votes: 0
+			},
+			{
+				id: 2,
+				answer: req.body.answers[1].answer,
+				votes: 0
+			},
+			{
+				id: 3,
+				answer: req.body.answers[2].answer,
+				votes: 0
+			},
+		]
 	};
 
-	answers.push(answer);
-	res.send(answer);
+	questions.push(question);
+	res.send(question);
 });
 
-app.put('/api/answers/:id', (req, res) => {
-	const answer = answers.find(c => c.id === parseInt(req.params.id));
-	if(!answer) return res.status(404).send('The answer with the given ID was not found');
+app.put('/api/questions/:id', (req, res) => {
+	const answer = questions.find(c => c.id === parseInt(req.params.id));
+	if (!answer) return res.status(404).send('The answer with the given ID was not found');
 
-	const { error } = validateAnswers(req.body);
+	const { error } = validateQuestions(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
 
 
@@ -57,32 +71,32 @@ app.put('/api/answers/:id', (req, res) => {
 	res.send(answer);
 });
 
-app.delete('/api/answers/:id', (req, res) => {
-	const answer = answers.find(c => c.id === parseInt(req.params.id));
-	if(!answer) return res.status(404).send('The answer with the given ID was not found');
+app.delete('/api/questions/:id', (req, res) => {
+	const question = questions.find(c => c.id === parseInt(req.params.id));
+	if (!question) return res.status(404).send('The question with the given ID was not found');
 
-	const index = answers.indexOf(answer);
-	answers.splice(index, 1);
-	res.send(answer);
+	const index = questions.indexOf(question);
+	questions.splice(index, 1);
+	res.send(question);
 });
 
 
-app.get('/api/answers/:id', (req, res) => {
-	const answer = answers.find(c => c.id === parseInt(req.params.id));
-	if(!answer) return res.status(404).send('The answer with the given ID was not found');
-	res.send(answer);
+app.get('/api/questions/:id', (req, res) => {
+	const question = questions.find(c => c.id === parseInt(req.params.id));
+	if (!question) return res.status(404).send('The question with the given ID was not found');
+	res.send(question);
 });
 
-function validateAnswers(answers){
+function validateQuestions(questions) {
 	const schema = {
-		answer: Joi.string().min(3).required()
+		question: Joi.string().min(3).required(),
+		answers: Joi.array()
 	};
 
-	return Joi.validate(answers, schema);
+	return Joi.validate(questions, schema);
 }
 
 
 //PORT
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log("Listerning on port " + port +"..."));
-
+app.listen(port, () => console.log("Listerning on port " + port + "..."));
