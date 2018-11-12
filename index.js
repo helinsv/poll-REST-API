@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-const answers = [
+const questions = [
 	{ 
 		id: 1, 
 		answer:'Заленський',
@@ -27,29 +27,29 @@ app.get('/', (req, res) => {
 	res.send('Hello world!');
 });
 
-app.get('/api/answers', (req, res) => {
-	res.send(answers);
+app.get('/api/questions', (req, res) => {
+	res.send(questions);
 });
 
-app.post('/api/answers', (req, res) => {
-	const { error } = validateAnswers(req.body);
+app.post('/api/questions', (req, res) => {
+	const { error } = validateQuestions(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
 
 	const answer = {
-		id: answers.length + 1,
+		id: questions.length + 1,
 		answer: req.body.answer,
 		votes: 0
 	};
 
-	answers.push(answer);
+	questions.push(answer);
 	res.send(answer);
 });
 
-app.put('/api/answers/:id', (req, res) => {
-	const answer = answers.find(c => c.id === parseInt(req.params.id));
+app.put('/api/questions/:id', (req, res) => {
+	const answer = questions.find(c => c.id === parseInt(req.params.id));
 	if(!answer) return res.status(404).send('The answer with the given ID was not found');
 
-	const { error } = validateAnswers(req.body);
+	const { error } = validateQuestions(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
 
 
@@ -57,28 +57,28 @@ app.put('/api/answers/:id', (req, res) => {
 	res.send(answer);
 });
 
-app.delete('/api/answers/:id', (req, res) => {
-	const answer = answers.find(c => c.id === parseInt(req.params.id));
+app.delete('/api/questions/:id', (req, res) => {
+	const answer = questions.find(c => c.id === parseInt(req.params.id));
 	if(!answer) return res.status(404).send('The answer with the given ID was not found');
 
-	const index = answers.indexOf(answer);
-	answers.splice(index, 1);
+	const index = questions.indexOf(answer);
+	questions.splice(index, 1);
 	res.send(answer);
 });
 
 
-app.get('/api/answers/:id', (req, res) => {
-	const answer = answers.find(c => c.id === parseInt(req.params.id));
+app.get('/api/questions/:id', (req, res) => {
+	const answer = questions.find(c => c.id === parseInt(req.params.id));
 	if(!answer) return res.status(404).send('The answer with the given ID was not found');
 	res.send(answer);
 });
 
-function validateAnswers(answers){
+function validateQuestions(questions){
 	const schema = {
 		answer: Joi.string().min(3).required()
 	};
 
-	return Joi.validate(answers, schema);
+	return Joi.validate(questions, schema);
 }
 
 
