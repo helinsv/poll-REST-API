@@ -6,22 +6,25 @@ app.use(express.json());
 
 const questions = [{
 	id: '1',
-	question: 'hto stane novum zlodiem?',
+	question: 'Хто стане президентом?',
 	answers: [
 		{
 			id: '1',
-			answer: 'zelensky',
-			votes: 1
+			answer: 'Зеленський',
+			vote: 0,
+			procent: 0
 		},
 		{
 			id: '2',
-			answer: 'poroshenko',
-			votes: 2
+			answer: 'Порошенко',
+			vote: 0,
+			procent: 0
 		},
 		{
 			id: '3',
-			answer: 'vakarchyk',
-			votes: 3
+			answer: 'Вакарчук',
+			vote: 0,
+			procent: 0
 		},
 	],
 }];
